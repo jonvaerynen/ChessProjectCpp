@@ -1,0 +1,16 @@
+# Visual Studio -roskat
+.vs/
+*.user
+*.suo
+*.VC.db
+*.opensdf
+*.sdf
+
+# Build-kansiot
+x64/
+x86/
+Debug/
+Release/
+*.obj
+*.exe
+*.log
