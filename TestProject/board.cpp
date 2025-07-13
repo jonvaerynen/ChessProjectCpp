@@ -52,7 +52,7 @@ void Board::fillBoard() {
 	board[BLACK_BACK_ROW][6] = new Piece{ PieceType::Knight, PieceColour::Black };
 	board[BLACK_BACK_ROW][7] = new Piece{ PieceType::Rook, PieceColour::Black };
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
 		board[BLACK_PAWN_ROW][i] = new Piece{ PieceType::Pawn, PieceColour::Black };
 		board[WHITE_PAWN_ROW][i] = new Piece{ PieceType::Pawn, PieceColour::White };
 	}

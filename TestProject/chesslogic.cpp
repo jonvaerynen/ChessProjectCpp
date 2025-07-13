@@ -185,8 +185,8 @@ bool Board::canCastle(PieceColour colour, bool kingSide)  {
 		: QUEENSIDE_ROOK_COL;
 
 	int direction = (kingSide) 
-		? BLACK_MOVING_DIRECTION 
-		: WHITE_MOVING_DIRECTION;
+		? 1 // Oikealle
+		: -1; // Vasemmalle
 
 
 	Piece* king = board[row][KING_START_COL];

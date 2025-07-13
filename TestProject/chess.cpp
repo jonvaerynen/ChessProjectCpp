@@ -4,6 +4,7 @@
 
 Board Chessboard;
 PieceColour currentPlayer = PieceColour::White;
+bool isPlayingAgainstAI = false;
 
 void UserInput();
 void switchPlayer();
@@ -31,8 +32,12 @@ void UserInput() {
 
 	if (move == "u") {	
 		Chessboard.undoMove();
-		Chessboard.undoMove();
 		switchPlayer();
+		if (isPlayingAgainstAI && !Chessboard.MoveHistory.empty()) {
+			Chessboard.undoMove();
+			switchPlayer();
+		}
+
 		Chessboard.drawBoard();
 		return;
 	}
