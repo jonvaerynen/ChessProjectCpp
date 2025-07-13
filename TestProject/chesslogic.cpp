@@ -32,8 +32,8 @@ bool Board::tryMove(Position from, Position to) {
 			return false;
 
 		castlingOccured = true;
-		int RookStart = kingSide ? 7 : 0;
-		int RookEnd = kingSide ? 5 : 3;
+		int RookStart = kingSide ? KINGSIDE_ROOK_COL : QUEENSIDE_ROOK_COL;
+		int RookEnd = kingSide ? KINGSIDE_ROOK_END : QUEENSIDE_ROOK_END;
 
 		RookFrom = { from.row, RookStart };
 		RookTo = { from.row, RookEnd };
@@ -59,8 +59,8 @@ bool Board::tryMove(Position from, Position to) {
 			capturedPieceClone = enPassantCaptured ? enPassantCaptured->clone() : nullptr ;
 		}
 
-		if (piece->colour == PieceColour::White && to.row == 0
-			|| piece->colour == PieceColour::Black && to.row == 7) {
+		if (piece->colour == PieceColour::White && to.row == BLACK_BACK_ROW
+			|| piece->colour == PieceColour::Black && to.row == WHITE_BACK_ROW) {
 			promote(piece);
 			promotion = true;
 		}
@@ -93,8 +93,8 @@ bool Board::tryMove(Position from, Position to) {
 
 void Board::castling(int row, bool kingSide) {
 
-	int RookFromCol = kingSide ? 7 : 0 ;
-	int RookToCol = kingSide ? 5 : 3 ;
+	int RookFromCol = kingSide ? KINGSIDE_ROOK_COL : QUEENSIDE_ROOK_COL ;
+	int RookToCol = kingSide ? KINGSIDE_ROOK_END : QUEENSIDE_ROOK_END ;
 
 	Piece* rook = board[row][RookFromCol];
 	if (!rook) {
@@ -111,8 +111,8 @@ void Board::castling(int row, bool kingSide) {
 bool Board::isInCheck(PieceColour colour) const {
 	Position kingPosition = findKing(colour);
 
-	for (int r = 0; r < 8; r++) {
-		for (int c = 0; c < 8; c++) {
+	for (int r = 0; r < BOARD_SIZE; r++) {
+		for (int c = 0; c < BOARD_SIZE; c++) {
 			Piece* p = board[r][c];
 			if (p != nullptr && p->colour != colour) {
 				if (p->type == PieceType::King) {
@@ -132,8 +132,8 @@ bool Board::isInCheck(PieceColour colour) const {
 
 Position Board::findKing(PieceColour colour)const {
 
-	for (int r = 0; r < 8; r++) {
-		for (int c = 0; c < 8; c++) {
+	for (int r = 0; r < BOARD_SIZE; r++) {
+		for (int c = 0; c < BOARD_SIZE; c++) {
 			Piece* p = board[r][c];
 			if (p && p->type == PieceType::King && p->colour == colour) {
 				return { r,c };
@@ -145,8 +145,12 @@ Position Board::findKing(PieceColour colour)const {
 
 Piece* enPassant(Position from, Position to, Piece* piece, Piece* capturedPiece, std::optional<Position> &enPassantCapturedPosition, Board& board) {
 
-	int startRow = (piece->colour == PieceColour::White) ? 6 : 1;
-	int direction = (piece->colour == PieceColour::White) ? -1 : 1;
+	int startRow = (piece->colour == PieceColour::White) 
+		? board.WHITE_PAWN_ROW 
+		: board.BLACK_PAWN_ROW;
+	int direction = (piece->colour == PieceColour::White) 
+		? board.WHITE_MOVING_DIRECTION
+		: board.BLACK_MOVING_DIRECTION;
 
 	if (from.row == startRow && to.row == from.row + direction * 2) {
 		board.enPassantTarget = { from.row + direction, from.col };
@@ -172,24 +176,32 @@ Piece* enPassant(Position from, Position to, Piece* piece, Piece* capturedPiece,
 
 bool Board::canCastle(PieceColour colour, bool kingSide)  {
 	
-	int row = (colour == PieceColour::White) ? 7 : 0;
-	int kingCol = 4;
-	int RookCol = (kingSide) ? 7 : 0;
-	int direction = (kingSide) ? 1 : -1;
+	int row = (colour == PieceColour::White) 
+		? WHITE_BACK_ROW 
+		: BLACK_BACK_ROW;
 
-	Piece* king = board[row][kingCol];
+	int RookCol = (kingSide) 
+		? KINGSIDE_ROOK_COL 
+		: QUEENSIDE_ROOK_COL;
+
+	int direction = (kingSide) 
+		? BLACK_MOVING_DIRECTION 
+		: WHITE_MOVING_DIRECTION;
+
+
+	Piece* king = board[row][KING_START_COL];
 	Piece* Rook = board[row][RookCol];
 
 	if (!king || !Rook || king->hasMoved || Rook->hasMoved)
 		return false;
 
-	for (int c = kingCol + direction; c != RookCol; c += direction) {
+	for (int c = KING_START_COL + direction; c != RookCol; c += direction) {
 		if (board[row][c] != nullptr)
 			return false;
 	}
 	for (int i = 1; i <= 2; i++) {
-		int testCol = kingCol + i * direction;
-		if (simulateMove({ row, kingCol }, { row, testCol }))
+		int testCol = KING_START_COL + i * direction;
+		if (simulateMove({ row, KING_START_COL }, { row, testCol }))
 			return false;
 	}
 
@@ -222,13 +234,13 @@ void promote(Piece* piece) {
 
 bool Board::hasLegalMoves(PieceColour colour) {
 
-	for (int r1 = 0; r1 < 8; r1++) {
-		for (int c1 = 0; c1 < 8; c1++) {
+	for (int r1 = 0; r1 < BOARD_SIZE; r1++) {
+		for (int c1 = 0; c1 < BOARD_SIZE; c1++) {
 			Piece* piece = board[r1][c1];
 			if (!piece || piece->colour != colour)	continue;
 
-			for (int r2 = 0; r2 < 8; r2++) {
-				for (int c2 = 0; c2 < 8; c2++) {
+			for (int r2 = 0; r2 < BOARD_SIZE; r2++) {
+				for (int c2 = 0; c2 < BOARD_SIZE; c2++) {
 
 					Position from = { r1,c1 };
 					Position to = { r2,c2 };

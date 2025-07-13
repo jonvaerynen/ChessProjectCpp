@@ -31,6 +31,7 @@ void UserInput() {
 
 	if (move == "u") {	
 		Chessboard.undoMove();
+		Chessboard.undoMove();
 		switchPlayer();
 		Chessboard.drawBoard();
 		return;
@@ -41,8 +42,8 @@ void UserInput() {
 		return;
 	}
 
-	Position from{8 - (move[1] - '0'), move[0] - 'a'};
-	Position to{8 - (move[3] - '0'), move[2] - 'a'};
+	Position from{Chessboard.BOARD_SIZE - (move[1] - '0'), move[0] - 'a'};
+	Position to{Chessboard.BOARD_SIZE - (move[3] - '0'), move[2] - 'a'};
 
 	if (from.row < 0 || from.row > 7 || from.col < 0 || from.col > 7 ||
 		to.row < 0 || to.row > 7 || to.col < 0 || to.col > 7) {

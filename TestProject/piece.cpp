@@ -47,15 +47,17 @@ bool Piece::isValidMove(Position from, Position to, const Board& board) const {
 		int dr = to.row - from.row;
 		int dc = std::abs(from.col - to.col);
 
-		int direction = (colour == PieceColour::White) ? -1 : 1;
+		int direction = (colour == PieceColour::White) 
+			? board.WHITE_MOVING_DIRECTION 
+			: board.BLACK_MOVING_DIRECTION;
 
 		if (dc == 0 && dr == direction && dest == nullptr) {
 			return true;
 		}
 
 		if (dc == 0 && dr == direction * 2 && board.board[from.row + direction][from.col] == nullptr) {
-			if ((colour == PieceColour::White && from.row == 6)
-				|| colour == PieceColour::Black && from.row == 1) {
+			if ((colour == PieceColour::White && from.row == board.WHITE_PAWN_ROW)
+				|| colour == PieceColour::Black && from.row == board.BLACK_PAWN_ROW) {
 				return true;
 			}
 		}

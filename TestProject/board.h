@@ -8,7 +8,22 @@
 
 class Board {
 public:
-	std::array<std::array<Piece*, 8>, 8> board;
+
+	static constexpr int BOARD_SIZE = 8;
+	static constexpr int WHITE_PAWN_ROW = 6;
+	static constexpr int BLACK_PAWN_ROW = 1;
+	static constexpr int WHITE_BACK_ROW = 7;
+	static constexpr int BLACK_BACK_ROW = 0;
+	static constexpr int KING_START_COL = 4;
+	static constexpr int QUEENSIDE_ROOK_COL = 0;
+	static constexpr int KINGSIDE_ROOK_COL = 7;
+	static constexpr int KINGSIDE_ROOK_END = 5;
+	static constexpr int QUEENSIDE_ROOK_END = 3;
+	static constexpr int WHITE_MOVING_DIRECTION = -1;
+	static constexpr int BLACK_MOVING_DIRECTION = 1;
+
+
+	std::array<std::array<Piece*, BOARD_SIZE>, BOARD_SIZE> board;
 	std::optional<Position> enPassantTarget;
 
 	std::vector<Move> MoveHistory;

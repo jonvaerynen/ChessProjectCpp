@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstdlib>
 
+void clearScreen() {
+	std::cout << "\033[2J\033[1;1H";
+}
 
 Board::Board() {
 	fillBoard();
@@ -15,12 +18,12 @@ Board::~Board() {
 	}
 }
 void Board::drawBoard() {
-	system("cls");
+	clearScreen();
 	std::cout << "    A   B   C   D   E   F   G   H  " << '\n';
 	std::cout << "  +---+---+---+---+---+---+---+---+" << '\n';
-	for (int i = 0; i < 8; i++) {
-		std::cout << 8 - i << " ";
-		for (int j = 0; j < 8; j++) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		std::cout << BOARD_SIZE - i << " ";
+		for (int j = 0; j < BOARD_SIZE; j++) {
 			std::cout << "|";
 			bool black = (i + j) % 2 == 0;
 			if (black)
@@ -40,28 +43,28 @@ void Board::fillBoard() {
 			cell = nullptr;
 		};
 	}
-	board[0][0] = new Piece{ PieceType::Rook, PieceColour::Black };
-	board[0][1] = new Piece{ PieceType::Knight, PieceColour::Black };
-	board[0][2] = new Piece{ PieceType::Bishop, PieceColour::Black };
-	board[0][3] = new Piece{ PieceType::Queen, PieceColour::Black };
-	board[0][4] = new Piece{ PieceType::King, PieceColour::Black };
-	board[0][5] = new Piece{ PieceType::Bishop, PieceColour::Black };
-	board[0][6] = new Piece{ PieceType::Knight, PieceColour::Black };
-	board[0][7] = new Piece{ PieceType::Rook, PieceColour::Black };
+	board[BLACK_BACK_ROW][0] = new Piece{ PieceType::Rook, PieceColour::Black };
+	board[BLACK_BACK_ROW][1] = new Piece{ PieceType::Knight, PieceColour::Black };
+	board[BLACK_BACK_ROW][2] = new Piece{ PieceType::Bishop, PieceColour::Black };
+	board[BLACK_BACK_ROW][3] = new Piece{ PieceType::Queen, PieceColour::Black };
+	board[BLACK_BACK_ROW][4] = new Piece{ PieceType::King, PieceColour::Black };
+	board[BLACK_BACK_ROW][5] = new Piece{ PieceType::Bishop, PieceColour::Black };
+	board[BLACK_BACK_ROW][6] = new Piece{ PieceType::Knight, PieceColour::Black };
+	board[BLACK_BACK_ROW][7] = new Piece{ PieceType::Rook, PieceColour::Black };
 
 	for (int i = 0; i < 8; i++) {
-		board[1][i] = new Piece{ PieceType::Pawn, PieceColour::Black };
-		board[6][i] = new Piece{ PieceType::Pawn, PieceColour::White };
+		board[BLACK_PAWN_ROW][i] = new Piece{ PieceType::Pawn, PieceColour::Black };
+		board[WHITE_PAWN_ROW][i] = new Piece{ PieceType::Pawn, PieceColour::White };
 	}
 
-	board[7][0] = new Piece{ PieceType::Rook, PieceColour::White };
-	board[7][1] = new Piece{ PieceType::Knight, PieceColour::White };
-	board[7][2] = new Piece{ PieceType::Bishop, PieceColour::White };
-	board[7][3] = new Piece{ PieceType::Queen, PieceColour::White };
-	board[7][4] = new Piece{ PieceType::King, PieceColour::White };
-	board[7][5] = new Piece{ PieceType::Bishop, PieceColour::White };
-	board[7][6] = new Piece{ PieceType::Knight, PieceColour::White };
-	board[7][7] = new Piece{ PieceType::Rook, PieceColour::White };
+	board[WHITE_BACK_ROW][0] = new Piece{ PieceType::Rook, PieceColour::White };
+	board[WHITE_BACK_ROW][1] = new Piece{ PieceType::Knight, PieceColour::White };
+	board[WHITE_BACK_ROW][2] = new Piece{ PieceType::Bishop, PieceColour::White };
+	board[WHITE_BACK_ROW][3] = new Piece{ PieceType::Queen, PieceColour::White };
+	board[WHITE_BACK_ROW][4] = new Piece{ PieceType::King, PieceColour::White };
+	board[WHITE_BACK_ROW][5] = new Piece{ PieceType::Bishop, PieceColour::White };
+	board[WHITE_BACK_ROW][6] = new Piece{ PieceType::Knight, PieceColour::White };
+	board[WHITE_BACK_ROW][7] = new Piece{ PieceType::Rook, PieceColour::White };
 
 
 }
